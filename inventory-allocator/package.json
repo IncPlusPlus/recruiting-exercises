@@ -1,0 +1,29 @@
+{
+  "name": "inventory-allocator",
+  "version": "1.0.0",
+  "description": "The problem is compute the best way an order can be shipped (called shipments) given inventory across a set of warehouses (called inventory distribution).",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "automock": false,
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|src.*?\\.(ispec|uspec))\\.(ts)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ]
+  },
+  "dependencies": {
+    "jest": "^26.4.2",
+    "ts-jest": "^26.3.0",
+    "typescript": "^4.0.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

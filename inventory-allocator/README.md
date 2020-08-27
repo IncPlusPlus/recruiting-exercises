@@ -27,35 +27,15 @@ You can assume that the list of warehouses is pre-sorted based on cost. The firs
 
 You can use any language of your choice to write the solution (internally we use Typescript/Javascript, Python, and some Java). Please write unit tests with your code, a few are mentioned below, but these are not comprehensive. Fork the repository and put your solution inside of the src directory and include a way to run your tests!
 
-## Examples
+## Solution
 
-### Order can be shipped using one warehouse
+I initially intended to stay inside my comfort zone and use Java to solve this. However, I poked around in the Git history and found that there was previously some TypeScript boilerplate present in the repo back when this problem expected InventoryAllocator to produce multiple shipment suggestions. I used this boilerplate code as a jumping-off point for writing [`InventoryAllocator`](./src/InventoryAllocator.ts).
 
-Input: `{ apple: 1 }, [{ name: owd, inventory: { apple: 1 } }]`  
-Output: `[{ owd: { apple: 1 } }]`
+I already knew JavaScript fairly well. After brushing up on my JS, I started learning about TS and began to experiment. I found out that I'm quite fond of TypeScript.
 
-### Order can be shipped using multiple warehouses
+### Running the test suite
 
-Input: `{ apple: 10 }, [{ name: owd, inventory: { apple: 5 } }, { name: dm, inventory: { apple: 5 }}]`  
-Output: `[{ dm: { apple: 5 }}, { owd: { apple: 5 } }]`
-
-### Order cannot be shipped because there is not enough inventory
-
-Input: `{ apple: 1 }, [{ name: owd, inventory: { apple: 0 } }]`  
-Output: `[]`
-
-Input: `{ apple: 2 }, [{ name: owd, inventory: { apple: 1 } }]`  
-Output: `[]`
-
-## FAQs
-**If an order can be completely shipped from one warehouse or shipped from multiple warehouses, which option is cheaper?**
-  We can assume that shipping out of one warehouse is cheaper than shipping from multiple warehouses.
-
-## What are we looking for
-
-We'll evaluate your code via the following guidelines in no particular order:
-
-1. **Readability**: naming, spacing, consistency
-2. **Correctness**: is the solution correct and does it solve the problem
-1. **Test Code Quality**: Is the test code comperehensive and covering all cases.
-1. **Tool/Language mastery**: is the code using up to date syntax and techniques. 
+1. Be sure you've got Node.js set up and working on your machine.
+1. Run `npm test` in your terminal with the working directory set to the root of the repository.
+1. ???
+1. Profit!
