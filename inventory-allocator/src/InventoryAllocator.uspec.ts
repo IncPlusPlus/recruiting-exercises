@@ -28,6 +28,15 @@ describe("Inventory Allocator", () => {
             .toEqual([]);
     });
 
+    it("should fail to allocate if one sku is missing inventory", () => {
+        expect(allocator.cheapestShipment({apple: 5, banana: 5, orange: 5},
+            {
+                owd: {apple: 5, orange: 2},
+                dm: {banana: 5, orange: 2},
+            }))
+            .toEqual([]);
+    });
+
     it("shouldn't consider skipped warehouses in the output", () => {
         expect(allocator.cheapestShipment({apple: 1}, {owd: {apple: 0}, dm: {apple: 1}}))
             //This test case exists just to make sure the output is
@@ -75,7 +84,7 @@ describe("Inventory Allocator", () => {
             }]);
     });
 
-    it("should be able to keep a 'happy case' item whole while splitting the rest of the order as necessary", () => {
+    it("shouldn't run into problems if one item isn't split but the rest are", () => {
         expect(allocator.cheapestShipment({strawberry: 15, orange: 4, banana: 6, apple: 7}, {
             owd: {orange: 2, strawberry: 2},
             dm: {banana: 4},
@@ -90,13 +99,41 @@ describe("Inventory Allocator", () => {
             }]);
     });
 
-    it("should fail to allocate if one sku is missing inventory", () => {
-        expect(allocator.cheapestShipment({apple: 5, banana: 5, orange: 5},
-            {
-                owd: {apple: 5, orange: 2},
-                dm: {banana: 5, orange: 2},
-            }))
-            .toEqual([]);
+    //https://github.com/deliverr/recruiting-exercises/issues/7#issuecomment-681118833
+    it("should be able to determine if a single warehouse can be used", () => {
+        expect(allocator.cheapestShipment({strawberry: 15, orange: 4, banana: 6, apple: 7}, {
+            owd: {orange: 2, strawberry: 2},
+            dm: {banana: 4},
+            sp: {strawberry: 3, apple: 7, orange: 2, banana: 2},
+            pm: {strawberry: 15, orange: 8, apple: 20},
+            dc: {banana: 60, strawberry: 35, orange: 80, apple: 50},
+        }))
+            .toEqual([{
+                dc: {strawberry: 15, orange: 4, banana: 6, apple: 7},
+            }]);
+    });
+
+    /*
+    Going in order of warehouses, the order can be fulfilled with 3 or 4. However, there's a solution that uses only 2.
+
+    Reading the reply from Deliverr (https://github.com/deliverr/recruiting-exercises/issues/7#issuecomment-681118833),
+    it seems like if there is more than one warehouse, start filling the order using the cheapest warehouses.
+
+    Therefore, the solution (if more than one warehouse is necessary) is actually to use as many
+    warehouses as necessary starting from the cheapest warehouse and moving onward.
+    */
+    it("should use cheapest warehouses to fulfill the order if it needs to be split", () => {
+        expect(allocator.cheapestShipment({strawberry: 15, orange: 4}, {
+            owd: {strawberry: 5, orange: 2},
+            dm: {strawberry: 4, orange: 2},
+            sp: {strawberry: 6, orange: 2},
+            pm: {strawberry: 15, orange: 2},
+        }))
+            .toEqual([{
+                owd: {strawberry: 5, orange: 2},
+                dm: {strawberry: 4, orange: 2},
+                sp: {strawberry: 6},
+            }]);
     });
 
 });
